@@ -1,0 +1,19 @@
+# API keys and secrets - NEVER commit these
+.env
+
+# Python
+__pycache__/
+*.pyc
+*.pyo
+venv/
+.venv/
+*.egg-info/
+
+# Mac system files
+.DS_Store
+
+# Database files
+chroma_db/
+
+# IDEs
+.cursor/
