@@ -46,7 +46,10 @@ test_inputs = [
     "It would be great if you added dark mode",
     "Your support team is absolutely terrible",
     "This product has completely transformed how our team works",
-    "How do I export my data to CSV?"
+    "How do I export my data to CSV?,
+    "I've been waiting 3 weeks for my refund and nobody is responding",
+    "The new update completely broke my existing workflow",
+    "Why did you remove the feature I use every day?"
 ]
 
 # Print a nice header so we know our automated tests are starting
