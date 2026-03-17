@@ -67,6 +67,10 @@ for review in test_reviews:
     # Trigger the chain: analyze the review and rigorously force the output into our Pydantic blueprint
     result = summarizer_chain.invoke({"review": review})
     
+    # Automatically set priority to low for positive reviews
+    if result.sentiment == "positive":
+        result.priority = "low"
+    
     # Print the raw text we sent
     print(f"Original Review:\n\"{review}\"")
     
