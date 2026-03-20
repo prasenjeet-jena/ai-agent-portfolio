@@ -1,4 +1,5 @@
 import os
+import shutil
 import requests
 from bs4 import BeautifulSoup
 from urllib.parse import urljoin, urlparse
@@ -31,7 +32,8 @@ github_docs_urls = [
     "https://docs.github.com/en/pull-requests",
     "https://docs.github.com/en/actions",
     "https://docs.github.com/en/authentication",
-    "https://docs.github.com/en/organizations"
+    "https://docs.github.com/en/organizations",
+    "https://docs.github.com/en/repositories/configuring-branches-and-merges"
 ]
 
 # ==============================================================================
@@ -51,6 +53,11 @@ embeddings_model = OpenAIEmbeddings(model="text-embedding-3-small")
 # Step 4: Initialize the Vector Database (ChromaDB)
 # ==============================================================================
 db_path = os.path.join(current_dir, "data", "chroma_db")
+
+if os.path.exists(db_path):
+    shutil.rmtree(db_path)
+    print("🗑️ Existing ChromaDB deleted. Starting fresh...")
+
 os.makedirs(db_path, exist_ok=True)
 chroma_client = chromadb.PersistentClient(path=db_path)
 
@@ -86,21 +93,13 @@ def run_ingestion():
 
     print("\n🚀 Starting GitHub Document Ingestion Pipeline...\n")
     
-    # 0. Delete existing collection to start fresh
-    try:
-        chroma_client.delete_collection(name="github_docs")
-        print("🗑️  Deleted existing ChromaDB collection 'github_docs' to start fresh.")
-    except ValueError:
-        # It's totally fine if the collection doesn't exist yet!
-        pass
-        
     # Create a fresh collection
     collection = chroma_client.create_collection(name="github_docs")
 
     # Tracking for our "deep" scrape
     visited_urls = set()
     urls_to_visit = list(github_docs_urls)  # Start with our seed URLs
-    max_pages = 50
+    max_pages = 100
     page_count = 0
 
     # We loop until we either run out of links, or hit our 50 page limit
