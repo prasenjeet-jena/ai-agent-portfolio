@@ -33,7 +33,8 @@ github_docs_urls = [
     "https://docs.github.com/en/actions",
     "https://docs.github.com/en/authentication",
     "https://docs.github.com/en/organizations",
-    "https://docs.github.com/en/repositories/configuring-branches-and-merges"
+    "https://docs.github.com/en/repositories/configuring-branches-and-merges",
+    "https://docs.github.com/en/organizations/collaborating-with-groups-in-organizations/creating-a-new-organization-from-scratch"
 ]
 
 # ==============================================================================
