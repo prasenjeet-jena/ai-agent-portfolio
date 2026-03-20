@@ -15,11 +15,8 @@ import chromadb
 # ==============================================================================
 # Step 0: Setup and Authentication
 # ==============================================================================
-current_dir = os.path.dirname(os.path.abspath(__file__))
-project_root = os.path.abspath(os.path.join(current_dir, "..", ".."))
-env_path = os.path.join(project_root, ".env")
-
-load_dotenv(dotenv_path=env_path)
+from dotenv import load_dotenv, find_dotenv
+load_dotenv(find_dotenv())
 
 if not os.environ.get("OPENAI_API_KEY"):
     raise ValueError("OPENAI_API_KEY not found in .env file.")

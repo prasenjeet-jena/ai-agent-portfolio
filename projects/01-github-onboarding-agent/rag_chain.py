@@ -12,10 +12,10 @@ from pydantic import BaseModel, Field
 # Setup & Configuration
 # ==============================================================================
 
-# 1. Load the OpenAI API Key from the specified .env file
-# We do this so the API key is kept secret and not hardcoded in the script.
-env_path = "/Users/swarna/Desktop/ai-agent-portfolio/.env"
-load_dotenv(dotenv_path=env_path)
+# 1. Load the OpenAI API Key from the .env file automatically
+# We use find_dotenv() to dynamically find the file without exposing your system's raw file path!
+from dotenv import load_dotenv, find_dotenv
+load_dotenv(find_dotenv())
 
 if not os.environ.get("OPENAI_API_KEY"):
     raise ValueError("OPENAI_API_KEY not found in .env file at specified path.")

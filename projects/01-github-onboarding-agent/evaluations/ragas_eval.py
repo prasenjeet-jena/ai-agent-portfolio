@@ -12,8 +12,9 @@ sys.path.append(parent_dir)
 # Import the compiled LangGraph workflow
 from rag_chain import app
 
-# 1. Load the OpenAI API Key from the .env at the specified path
-load_dotenv("/Users/swarna/Desktop/ai-agent-portfolio/.env")
+# 1. Load the OpenAI API Key automatically without exposing the system path
+from dotenv import load_dotenv, find_dotenv
+load_dotenv(find_dotenv())
 
 print(f"\n============================================================")
 print(f"RAGAS Version: {ragas.__version__}")
