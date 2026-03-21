@@ -107,11 +107,40 @@ def generate_related_questions(question: str) -> list:
         print(f"Error generating related questions: {e}")
         return []
 
+def post_process_answer(raw_answer: str) -> str:
+    """Removes LLM chain-of-thought metadata and chunk references from the answer."""
+    ans = raw_answer.split("SOURCES:")[0].strip()
+    if ans.startswith("ANSWER:"):
+        ans = ans[7:].strip()
+        
+    lower_ans = ans.lower()
+    for marker in ["\nanswer:", "\nfinal answer:", "\nresponse:"]:
+        if marker in lower_ans:
+            idx = lower_ans.find(marker)
+            ans = ans[idx + len(marker):].strip()
+            break
+            
+    lines = ans.split('\n')
+    cleaned_lines = []
+    for line in lines:
+        lower_line = line.lower().strip()
+        if lower_line.startswith("relevant context") or lower_line.startswith("context passage") or lower_line.startswith("chunk "):
+            continue
+        if lower_line in ["answer:", "final answer:", "response:"]:
+            continue
+        if re.match(r'^[\-\*]\s*chunk\s*\d+', lower_line):
+            continue
+        cleaned_lines.append(line)
+        
+    return "\n".join(cleaned_lines).strip()
+
 def perform_search(query: str):
     """Executes the search via rag_chain, updates session tracking and caches."""
     st.session_state.total_searches += 1
     
     query_key = query.lower().strip()
+    
+    start_time = time.time()
     
     if query_key in st.session_state.cache:
         st.session_state.cache_hits += 1
@@ -129,6 +158,9 @@ def perform_search(query: str):
         # Store in local cache if we are highly confident
         if results.get("confidence") == "HIGH":
             st.session_state.cache[query_key] = results
+            
+    end_time = time.time()
+    results["time_taken"] = round(end_time - start_time, 2)
             
     # Reset feedback flag for new answers
     st.session_state.feedback_given = False
@@ -192,6 +224,26 @@ st.markdown("""
     }
     div.stButton > button[kind="primary"]:hover {
         background-color: #E85A28;
+    }
+
+    /* Secondary buttons (Chips, History, Feedback) */
+    div.stButton > button[kind="secondary"] {
+        background-color: #FFFFFF !important;
+        color: #1B3A6B !important;
+        border: 1px solid #1B3A6B !important;
+        border-radius: 20px !important;
+        font-weight: 500 !important;
+        transition: all 0.2s ease !important;
+    }
+    div.stButton > button[kind="secondary"]:hover {
+        background-color: #1B3A6B !important;
+        color: #FFFFFF !important;
+    }
+    div.stButton > button[kind="secondary"]:disabled {
+        background-color: #F3F4F6 !important;
+        color: #9CA3AF !important;
+        border: 1px solid #D1D5DB !important;
+        cursor: not-allowed;
     }
 
     /* Search Subtitle Text */
@@ -383,8 +435,6 @@ if submitted and input_query.strip():
     st.session_state.is_searching = True
     st.rerun()
     
-st.markdown("<div class='search-subtitle'>498 documentation pages indexed</div>", unsafe_allow_html=True)
-
 # Process active query logic
 query = st.session_state.search_query
 
@@ -397,7 +447,7 @@ if st.session_state.is_searching:
         st.markdown("<br><br>", unsafe_allow_html=True)
         col1, col2, col3 = st.columns([1, 2, 1])
         with col2:
-            with st.spinner("Searching 498 documentation pages..."):
+            with st.spinner("Searching documentation..."):
                 time.sleep(0.5)
             with st.spinner("Analysing results..."):
                 time.sleep(0.5)
@@ -490,6 +540,9 @@ elif st.session_state.current_results and query:
             if is_cached:
                  badge_html += '&nbsp;<span class="badge badge-cache">⚡ INSTANT ANSWER</span>'
                  
+            time_taken = results.get("time_taken", 0)
+            badge_html += f'&nbsp;<span class="badge" style="background-color: #6B7280;">⏱️ {time_taken}s</span>'
+                 
             warning_html = ""
             if conf == "LOW":
                 warning_html = """
@@ -499,7 +552,10 @@ elif st.session_state.current_results and query:
                 </div>
                 """
                 
-            ans_html = format_answer_html(ans)
+            # Clean the answer text from metadata appended by the backend
+            cleaned_ans = post_process_answer(ans)
+                
+            ans_html = format_answer_html(cleaned_ans)
             
             st.markdown(f"""
             <div class="summary-card">
@@ -537,10 +593,8 @@ elif st.session_state.current_results and query:
                     st.markdown(f"""
                     <a href="{url}" target="_blank" class="source-card">
                         <div class="source-title">📄 {title}</div>
-                        <div class="source-snippet">{snippet}</div>
-                        <div class="source-url">{url}</div>
+                        <div class="source-url" style="margin-bottom: 0;">{url}</div>
                         <div class="source-arrow">→</div>
-                        <div style="font-size: 0.85rem; color: #1B3A6B; font-weight: bold; margin-top: 0.5rem;">View documentation &rarr;</div>
                     </a>
                     """, unsafe_allow_html=True)
                     
