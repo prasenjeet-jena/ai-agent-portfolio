@@ -12,7 +12,7 @@ An intelligent, context-aware AI assistant designed to eliminate developer onboa
 ### Search Results with Confidence Scoring
 ![Search Results](assets/confidence_score.png)
 
-*Live demo available — run locally following setup instructions.*
+*Live demo available — run locally following setup instructions*
 
 ## 🚨 The Problem
 
