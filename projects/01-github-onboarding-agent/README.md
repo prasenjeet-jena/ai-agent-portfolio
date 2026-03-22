@@ -6,8 +6,11 @@ An intelligent, context-aware AI assistant designed to eliminate developer onboa
 
 ## 🖥️ Demo
 
-<!-- [Demo screenshot placeholder] -->
-![Demo Screenshot](/assets/demo-placeholder.png)
+### Search Interface
+![Search Interface](assets/search.png)
+
+### Search Results with Confidence Scoring
+![Search Results](assets/confidence_score.png)
 
 *Live demo available — run locally following setup instructions.*
 
