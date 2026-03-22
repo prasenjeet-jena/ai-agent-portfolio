@@ -29,7 +29,7 @@ Unlike asking ChatGPT, every response cites its sources. Users can verify and tr
 
 ## 🎯 Why I Built This
 
-I lead GenAI products at NielsenIQ. Every time we onboard engineers to a new internal platform, I watch the same pattern: good documentation, poor findability, frustrated new hires, overloaded senior engineers.
+Every time we onboard engineers to a new internal platform, I watch the same pattern: good documentation, poor findability, frustrated new hires, overloaded senior engineers.
 
 I built this to understand whether a RAG agent could genuinely solve this — not as a demo, but as something measurable. The RAGAS evaluation was my way of holding myself accountable to that standard.
 
