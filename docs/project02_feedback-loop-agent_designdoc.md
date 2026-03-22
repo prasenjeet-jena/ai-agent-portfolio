@@ -780,7 +780,7 @@ API:       REST — React calls FastAPI
 │ Last updated: 2 min ago      [Refresh]   │
 ├──────────────────────────────────────────┤
 │ TODAY AT A GLANCE                        │
-│ 📊 100 items → 12 themes identified      │
+│ 📊 100 items → upto 30 themes identified      │
 │ 🚨 [N] escalation signals               │
 │ 🔄 [N] cross-source patterns            │
 │ 📈 Sentiment vs yesterday: [trend]       │
@@ -912,7 +912,7 @@ Agent marks too many themes as HIGH. Decision Maker stops trusting the system.
 Mitigation: Hard cap of 10 HIGH priority themes per day. System must rank and select — not just flag everything.
 
 **Failure 3 — Theme over-splitting**
-Similar items split into too many themes. Decision Maker sees 40 themes instead of 15.
+Similar items split into too many themes. Decision Maker sees 50+ themes instead of 30.
 Mitigation: Similarity threshold configurable. LLM validation step merges related candidates. Maximum 30 themes enforced at output.
 
 **Failure 4 — Theme under-splitting**
