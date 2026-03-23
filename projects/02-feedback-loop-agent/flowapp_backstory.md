@@ -131,7 +131,7 @@ Appears in sales call notes.
 Technical, business-focused feedback. 
 Concerned about SSO, API limits, and data export for compliance.
 
-### Sarah — Customer Success Manager at FlowApp
+### Swarna — Customer Success Manager at FlowApp
 Internal persona. 
 Monitors the feedback intelligence dashboard for churn signals and escalation risks in the enterprise segment.
 
