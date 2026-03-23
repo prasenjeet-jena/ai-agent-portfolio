@@ -1,6 +1,6 @@
 import os
 import json
-from datetime import datetime
+from datetime import datetime, timezone
 from pathlib import Path
 
 from dotenv import load_dotenv, find_dotenv
@@ -51,6 +51,16 @@ def _load_json_file(filename: str):
     except Exception as e:
         return {"error": f"Unexpected error reading {filename}: {str(e)}"}
 
+def parse_date(date_str):
+    """
+    Bullet-proof parser for any Python 3.x version. 
+    By extracting just the date component before the 'T', we avoid all 
+    timezone-aware/naive offset compatibility issues intrinsically.
+    """
+    date_only = date_str.split("T")[0]
+    dt = datetime.strptime(date_only, "%Y-%m-%d")
+    return dt.replace(tzinfo=None)
+
 def _filter_by_date(data, since_date_str: str):
     """
     Helper function to filter data based on the 'timestamp' field.
@@ -61,9 +71,9 @@ def _filter_by_date(data, since_date_str: str):
         return data 
         
     try:
-        # Convert the user input "YYYY-MM-DD" into a datetime object for comparison
-        target_date = datetime.strptime(since_date_str, "%Y-%m-%d")
-    except ValueError:
+        # Convert the user input "YYYY-MM-DD" into a timezone-aware datetime object
+        target_date = parse_date(since_date_str)
+    except Exception:
         return {"error": f"Invalid date format: '{since_date_str}'. Please use exactly 'YYYY-MM-DD'."}
         
     filtered_results = []
@@ -71,14 +81,13 @@ def _filter_by_date(data, since_date_str: str):
     for item in data:
         raw_timestamp = item.get("timestamp", "")
         try:
-            # Parse the timestamp string from the JSON (assumes 'YYYY-MM-DDThh:mm:ssZ' format)
-            date_only_string = raw_timestamp.split("T")[0]
-            item_date = datetime.strptime(date_only_string, "%Y-%m-%d")
+            # Parse the timestamp string from the JSON
+            item_date = parse_date(raw_timestamp)
             
             # Keep the item if it occurred on or after the requested date
             if item_date >= target_date:
                 filtered_results.append(item)
-        except ValueError:
+        except Exception:
             # If an individual item has a bad timestamp, we skip it gracefully
             continue
             
