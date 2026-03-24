@@ -65,7 +65,9 @@ const EvidenceModal = ({ isOpen, onClose, clusterName, items = [] }) => {
                         {item.user_context?.subscription_tier || 'Free'} {item.user_context?.user_type || 'User'}
                       </span>
                       <span className="text-[10px] text-slate-500 truncate max-w-[150px]">
-                        {item.product_context?.platform} • {item.product_context?.device_model || 'Unknown Device'}
+                        {item.product_context?.platform} 
+                        {item.product_context?.browser ? ` • ${item.product_context.browser}` : ''}
+                        {item.product_context?.device_model ? ` • ${item.product_context.device_model}` : ''}
                       </span>
                     </div>
                   </td>
