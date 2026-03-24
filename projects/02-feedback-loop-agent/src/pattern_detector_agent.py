@@ -89,11 +89,11 @@ Please perform zero-shot clustering on the following batch of user feedback.
 Your goal is to extract clear "Product Themes" (e.g., Performance, UI/UX, Pricing, Data Integration) from the dataset.
 
 CRITICAL INSTRUCTIONS:
-1. Signal over Noise: Ignore generic feedback. Focus strictly on `complaint`, `bug_report`, `feature_request`, and `escalation`.
-2. Group the feedback logically into clusters based on the core issue. For EACH cluster, you MUST include the `feedback_ids` of the items you grouped there.
+1. Signal over Noise: Ignore generic feedback. Focus strictly on actionable signals: `complaint`, `bug_report`, `feature_request`, `escalation`, and `praise` (to capture what's working well).
+2. Group the feedback logically into clusters based on the core issue or theme. For EACH cluster, you MUST include the `feedback_ids` of the items you grouped there.
 3. Identify cross-source patterns where the same basic theme appears in multiple distinct sources (e.g., App Store + NPS). Populate `cross_source_patterns` with the theme, source counts, and the specific `feedback_ids` of the relevant items.
 4. Identify any 'emerging_risks' — these are severe complaints or churn threats that seem highly impactful.
-5. Output exactly 2 sentences of tactical `pm_recommendation` detailing the immediate next steps for the engineering/product team.
+5. Output exactly 2 sentences of tactical `pm_recommendation` detailing the immediate next steps for the engineering/product team (balancing fixes with doubling down on what users love).
 
 Data Batch:
 {json.dumps(condensed_payload, indent=2)}
