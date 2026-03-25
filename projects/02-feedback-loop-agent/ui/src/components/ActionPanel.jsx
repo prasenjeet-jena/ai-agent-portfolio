@@ -65,8 +65,8 @@ const ActionPanel = ({ isOpen, onClose, cluster }) => {
         onClick={onClose}
       />
 
-      {/* Slide-out Panel */}
-      <div className="fixed inset-y-0 right-0 w-full max-w-2xl bg-slate-50 shadow-2xl z-50 transform transition-transform duration-300 ease-in-out border-l border-slate-200 flex flex-col">
+      {/* Modal Panel */}
+      <div className="fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-[95vw] h-[90vh] max-w-5xl bg-slate-50 shadow-2xl z-50 rounded-2xl flex flex-col overflow-hidden border border-slate-200">
         {/* Header */}
         <div className="p-6 border-bottom border-slate-200 bg-white flex items-center justify-between shadow-sm z-10">
           <div className="flex items-center gap-3">
