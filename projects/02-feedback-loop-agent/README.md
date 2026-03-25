@@ -43,22 +43,32 @@ I built this to demonstrate a modern, practical application of AI in product man
 
 ```mermaid
 graph TD
-    A[Mock Data: App Store, NPS, Sales] -->|MCP Server| B(Feedback Monitor Agent)
-    B -->|Enriched Items| C(Pattern Detector Agent)
-    B & C -->|State Graph| D[latest_intelligence.json]
-    D --> E[React / Vite Dashboard]
-    E -->|Click 'Generate PRD'| F[FastAPI Backend]
-    F -->|Theme & Evidence| G[GPT-4o-mini]
-    G -->|Markdown PRD| E
+    subgraph "Data Layer"
+        A[Mock Data: App Store, NPS, Sales] -->|stdio| B[MCP Server]
+    end
+
+    subgraph "Intelligence Pipeline (Supervisor Agent / LangGraph)"
+        B -->|Tool Call| C[Feedback Monitor Agent<br/>'The Aggregator']
+        C -->|Enriched Feedback| D[Pattern Detector Agent<br/>'The Strategic Analyst']
+        D -->|Final Report| E[(latest_intelligence.json)]
+    end
+
+    subgraph "Action Layer (PRD Agent / FastAPI)"
+        F[React Dashboard] -->|Invoke Action| G[PRD Agent]
+        E -->|Read Trends| F
+        G -->|Generate Document| H[GPT-4o-mini]
+        H -->|Markdown PRD| F
+    end
 ```
 
 ## ⚙️ How It Works
 
-1. **MCP Integration:** An MCP server exposes tools to search and retrieve raw feedback from local mock data sources (App Store, NPS, Sales Notes).
-2. **The Aggregator Agent:** A LangGraph node connects to the MCP server, fetches data across all three sources, and enriches every item with contextual data (e.g., detecting hidden feature requests within negative reviews).
-3. **The Analyst Agent:** A second LangGraph node ingests the combined, enriched clipboard, running a zero-shot clustering algorithm to group feedback into priority themes, extract emerging risks, and output a structured strategic report.
-4. **Persistence & UI:** The resulting JSON report is saved locally and consumed by a Vite/React frontend, which displays interactive cluster cards and sentiment breakdowns.
-5. **PRD Generation:** When a PM investigates a cluster, they can trigger an action. The React app calls a local FastAPI server, which prompts an LLM to draft a structured, technical PRD (including hypothesis, success metrics, and user stories) directly from the specific feedback items.
+1.  **MCP Integration:** An MCP server exposes standardized tools to search and retrieve raw feedback from local mock data sources (App Store, NPS, Sales Notes), abstracting the data layer from the agents.
+2.  **The Supervisor Agent (LangGraph):** Acts as the central orchestrator, managing a stateful "digital clipboard" that flows between specialized intelligence nodes.
+3.  **The Feedback Monitor Agent:** A node within the graph that connects to the MCP server, fetches data across all sources, and enriches every item with deep semantic labels (true sentiment, intent, and sarcasm detection) using GPT-4o-mini.
+4.  **The Pattern Detector Agent:** A strategic node that ingests the enriched dataset and performs zero-shot clustering to group thousands of data points into priority themes, emerging risks, and tactical PM recommendations.
+5.  **Persistence & UI:** The supervisor saves the finalized intelligence report as a structured JSON file, which is instantly visualized by the React-based Command Center.
+6.  **The PRD Agent (FastAPI):** A dedicated fulfillment service. When a PM clicks "Draft PRD", this agent retrieves the specific cluster evidence and prompts an LLM to generate a professional, highly technical PRD in Markdown format.
 
 ## 🛠️ Tech Stack
 
