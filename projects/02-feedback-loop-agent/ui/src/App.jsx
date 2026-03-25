@@ -4,6 +4,7 @@ import RiskRadar from './components/RiskRadar'
 import TrendGrid from './components/TrendGrid'
 import EvidenceModal from './components/EvidenceModal'
 import FilterSidebar from './components/FilterSidebar'
+import ActionPanel from './components/ActionPanel'
 import './App.css'
 
 function App() {
@@ -13,6 +14,10 @@ function App() {
   // -- Modal State --
   const [isModalOpen, setIsModalOpen] = useState(false)
   const [selectedCluster, setSelectedCluster] = useState(null)
+  
+  // -- Action Panel State --
+  const [isActionPanelOpen, setIsActionPanelOpen] = useState(false)
+  const [selectedActionCluster, setSelectedActionCluster] = useState(null)
   const [modalItems, setModalItems] = useState([])
 
   // -- Segmented Intelligence: State --
@@ -83,7 +88,11 @@ function App() {
     setIsModalOpen(true);
   };
 
-  // Format the timestamp into a human-readable string
+  const handleDraftPRD = (cluster) => {
+    setSelectedActionCluster(cluster);
+    setIsActionPanelOpen(true);
+  };
+
   const formatDate = (isoString) => {
     if (!isoString) return 'N/A'
     const date = new Date(isoString)
@@ -258,6 +267,7 @@ function App() {
               filteredItems={filteredItems} 
               staticClusters={data.clusters}
               onViewEvidence={handleViewEvidence}
+              onDraftPRD={handleDraftPRD}
             />
           </div>
 
@@ -285,6 +295,12 @@ function App() {
         onClose={() => setIsModalOpen(false)}
         clusterName={selectedCluster}
         items={modalItems}
+      />
+
+      <ActionPanel 
+        isOpen={isActionPanelOpen} 
+        onClose={() => setIsActionPanelOpen(false)} 
+        cluster={selectedActionCluster}
       />
     </div>
   )

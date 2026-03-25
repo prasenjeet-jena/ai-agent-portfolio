@@ -1,6 +1,6 @@
-import { ChevronRight, Inbox } from 'lucide-react';
+import { ChevronRight, Inbox, FileText } from 'lucide-react';
 
-const TrendGrid = ({ filteredItems = [], staticClusters = [], onViewEvidence }) => {
+const TrendGrid = ({ filteredItems = [], staticClusters = [], onViewEvidence, onDraftPRD }) => {
   // -- Intersection-Based Dynamic Clustering --
   // We use the 'staticClusters' (the AI-generated Moat) as our architectural base.
   // Then we filter their contents based on the user's current 'filteredItems'.
@@ -82,14 +82,21 @@ const TrendGrid = ({ filteredItems = [], staticClusters = [], onViewEvidence }) 
           </div>
 
           {/* Card Footer */}
-          <div className="p-4 bg-slate-50/50 border-t border-slate-100 mt-auto text-right">
+          <div className="p-4 bg-slate-50/50 border-t border-slate-100 mt-auto flex gap-2 justify-end">
+            <button 
+              onClick={() => onDraftPRD(cluster)}
+              className="px-4 py-2 bg-slate-900 border border-slate-900 rounded-lg text-xs font-bold text-white hover:bg-slate-800 flex items-center justify-center gap-1.5 transition-all shadow-sm active:scale-[0.98]"
+            >
+              <FileText className="w-3.5 h-3.5" />
+              Draft PRD
+            </button>
             <button 
               onClick={() => onViewEvidence({
                 ...cluster,
                 // Ensure App.jsx handleViewEvidence finds these items in its lookup
                 feedback_ids: cluster.feedback_ids 
               })}
-              className="px-4 py-2 bg-white border border-slate-200 rounded-lg text-xs font-bold text-slate-700 hover:bg-slate-50 flex items-center justify-center gap-1 transition-all group-hover:border-blue-400 group-hover:text-blue-600 ml-auto shadow-sm active:scale-[0.98]"
+              className="px-4 py-2 bg-white border border-slate-200 rounded-lg text-xs font-bold text-slate-700 hover:bg-slate-50 flex items-center justify-center gap-1 transition-all group-hover:border-blue-400 group-hover:text-blue-600 shadow-sm active:scale-[0.98]"
             >
               View Evidence
               <ChevronRight className="w-3 h-3" />
