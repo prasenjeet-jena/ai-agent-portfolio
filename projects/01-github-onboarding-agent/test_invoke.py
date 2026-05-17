@@ -1,15 +1,14 @@
 import sys
 import os
 sys.path.append(os.path.abspath('.'))
-from rag_chain import workflow, app
-print("Workflow type:", type(workflow))
+from rag_chain import app
+
 print("App type:", type(app))
-try:
-    workflow.invoke({"original_question": "test"})
-except Exception as e:
-    print("workflow error:", type(e).__name__, e)
 
 try:
-    print(app.invoke({"original_question": "test"}))
+    print("Invoking app...")
+    result = app.invoke({"original_question": "What is GitHub?"})
+    print("Success! Result keys:", result.keys())
+    print("Confidence:", result.get("confidence"))
 except Exception as e:
-    print("app error:", type(e).__name__, e)
+    print("Error invoking app:", type(e).__name__, e)

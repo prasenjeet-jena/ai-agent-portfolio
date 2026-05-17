@@ -11,4 +11,8 @@ export default defineConfig({
   // When the pipeline regenerates the JSON, the UI sees fresh data
   // on the next page reload automatically.
   publicDir: '../data',
+  server: {
+    port: 5173,
+    strictPort: true,
+  },
 })
